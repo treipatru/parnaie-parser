@@ -3,8 +3,8 @@ const fs = require("fs");
 const data = require("./data-sample.js");
 const today = new Date;
 const timestamp = '' + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
-const exportFileName = "output/" + timestamp+ "-export.json";
-const exportLogName = "output/" + timestamp + "-export.log";
+const exportFileName = "output/" + timestamp+ ".json";
+const exportLogName = "output/" + timestamp + ".log";
 
 // Use log4js to nicely create export logs
 const log4js = require("log4js");
