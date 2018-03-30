@@ -8,7 +8,7 @@
 
 ## Use
 
-Launch with `$ node parse.js`
+Launch with `$ node parse.js filename.js` where filename is a module exporting an array of strings `dictionary`.
 
 ### Regex
 
