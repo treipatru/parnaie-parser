@@ -1,6 +1,6 @@
 // Imports & vars --------------------------------------------------------------
 const fs = require("fs");
-const data = require("./data-sample.js");
+const data = require("./" + process.argv[2]);
 const today = new Date;
 const timestamp = '' + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
 const exportFileName = "output/" + timestamp+ ".json";
