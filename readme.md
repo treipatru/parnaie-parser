@@ -1,13 +1,24 @@
 # Parnaie Parser
 
-> Parsing script for [parnaie](https://github.com/danakim/parnaie) dataset.
+> Parsing tool for [parnaie](https://github.com/danakim/parnaie) dataset.
 
-#### Regex
-One-liner:
+## Install
+
+`$ yarn install` or `$ npm install` for the dependencies.
+
+## Use
+
+Launch with `$ node parse.js`
+
+### Regex
+
+The heavy lifting is done by a regex. Here's the one-liner version:
 
 ```
 /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.\s?(f|invar|m|n|pl|propr|v)?\.?\s?(invar|pl|v)?\.?\s*(?:\((.*)\))?)(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(.*)$/
 ```
+
+... and what the groups are doing:
 
 `(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)`
 
@@ -27,3 +38,12 @@ One-liner:
 `(.*)$/`
 
 * Captures single (non-numbered) definition
+
+### Output
+
+Two time-stamped files in `/output`:
+
+ * `DDHHMMSS.json`
+ * `DDHHMMSS.log`
+ 
+ To allow easy comparison of exports files are never deleted automatically.
