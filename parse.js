@@ -1,10 +1,14 @@
+"use strict"
+
 // Imports & vars --------------------------------------------------------------
 const fs = require("fs");
 const data = require("./" + process.argv[2]);
 const today = new Date;
 const timestamp = '' + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
-const exportFileName = "output/" + timestamp+ ".json";
+const exportFileName = "output/" + timestamp+ ".txt";
 const exportLogName = "output/" + timestamp + ".log";
+let counter = 0;
+let exportData = "";
 
 // Use log4js to nicely create export logs
 const log4js = require("log4js");
@@ -29,19 +33,23 @@ const rex = /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.
 
 // Functions -------------------------------------------------------------------
 /**
- * Checks for truthy then either trims str and returns it or return val.
+ * Checks for truthy then either trims str and returns it or return empty
+ * string.
  *
  * @function sanitizeVal
  * @param {string} str - The string to be checked.
- * @param {*} val - What to return if str is falsey.
  * @returns {*} - Sanitized str or val.
  */
- function sanitizeVal (str, val) {
+ function sanitizeVal (str, key) {
   if (str) {
     let x = str.trim()
-    return x.length === 0 ? val : x;
+    if (x.length === 0) {
+      return key + " \"\"";
+    } else {
+      return " " + key + " " + "\"" + x + "\"";
+    }
   } else {
-    return val
+    return " " + key + " \"\"";
   }
 }
 
@@ -54,36 +62,65 @@ const rex = /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.
  * @returns {Array} - Parsed data; an array of objects.
  */
  function parseData (arr) {
-  let parsed = arr.map((word) => {
-    if (word !== null) {
-      let matches = word.match(rex);
+  arr.forEach((entry) => {
+    if (entry !== null) {
+      let matches = entry.match(rex);
 
-      if (!matches) {
-        return "";
-      } else {
-        let obj = {
-          props: [],
-          defs: []
-        }
+      if (matches) {
+        counter ++;
+        let str = " id:" + counter;
 
         matches.forEach((p, index) => {
-          if (index === 0) {
-            obj.fullStr = sanitizeVal(p, false);
-          } else if (index === 1) {
-            obj.word = sanitizeVal(p, false);
-          } else if (index > 1 && index < 6) {
-            obj.props.push(sanitizeVal(p, false));
-          } else if (index >= 6) {
-            obj.defs.push(sanitizeVal(p, false));
+          switch (index) {
+            case 0:
+              str = str + sanitizeVal(p, "full")
+              break;
+            case 1:
+              str = str + sanitizeVal(p, "word")
+              break;
+            case 2:
+              str = str + sanitizeVal(p, "prop0")
+              break;
+            case 3:
+              str = str + sanitizeVal(p, "prop1")
+              break;
+            case 4:
+              str = str + sanitizeVal(p, "prop2")
+              break;
+            case 5:
+              str = str + sanitizeVal(p, "prop3")
+              break;
+            case 6:
+              str = str + sanitizeVal(p, "def0")
+              break;
+            case 7:
+              str = str + sanitizeVal(p, "def1")
+              break;
+            case 8:
+              str = str + sanitizeVal(p, "def2")
+              break;
+            case 9:
+              str = str + sanitizeVal(p, "def3")
+              break;
+            case 10:
+              str = str + sanitizeVal(p, "def4")
+              break;
+            case 11:
+              str = str + sanitizeVal(p, "def5")
+              break;
+            case 12:
+              str = str + sanitizeVal(p, "def6") + "\n"
+              break;
+            default:
+              break;
           }
         })
 
-        logger.debug("✔ " + obj.word)
-        return obj
+        exportData += str
+        logger.debug("✔ " + matches[1])
       }
     }
-  });
-  return parsed;
+  })
 }
 
 /**
@@ -94,8 +131,8 @@ const rex = /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.
  * @param {string} fileName - Name of export file.
  */
  function writeFile (o, fileName) {
-  let fileContents = JSON.stringify(o);
-  fs.writeFileSync(fileName, fileContents);
+  // let fileContents = JSON.stringify(o);
+  fs.writeFileSync(fileName, o);
 }
 
 
@@ -104,7 +141,7 @@ console.log("\n > Parsing...")
 let output = parseData(data.dictionary);
 
 console.log(" > Saving...")
-writeFile(output, exportFileName);
+writeFile(exportData, exportFileName);
 
 console.log("    ❤ Data in " + exportFileName);
 console.log("    ❤ Log  in " + exportLogName);
