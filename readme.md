@@ -8,7 +8,20 @@
 
 ## Use
 
-Launch with `$ node parse.js filename.js` where filename is a module exporting an array (`dictionary`) of strings.
+Launch with `$ node parse.js filename.js` where filename is a module exporting an array (`dictionary`) of strings (like in `data-sample.js`).
+
+## Output
+
+Two time-stamped files in `/output`:
+
+* `DDHHMMSS.txt`
+* `DDHHMMSS.log`
+
+Each dictionary entry is output to a line like below:
+
+```
+id:1 full "abataj, abataje s.n. stomac, burtă." word "abataj, abataje" prop0 "s" prop1 "n" prop2 "" prop3 "" def0 "" def1 "" def2 "" def3 "" def4 "" def5 "" def6 "stomac, burtă."
+```
 
 ### Regex
 
@@ -38,12 +51,3 @@ The heavy lifting is done by a regex. Here's the one-liner version:
 `(.*)$/`
 
 * Captures single (non-numbered) definition
-
-### Output
-
-Two time-stamped files in `/output`:
-
- * `DDHHMMSS.json`
- * `DDHHMMSS.log`
- 
- To allow easy comparison of exports files are never deleted automatically.
