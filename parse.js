@@ -2,7 +2,13 @@
 
 // Imports & vars --------------------------------------------------------------
 const fs = require("fs");
+
+if (!process.argv[2]) {
+  console.log('No source file specified. Try: \n> node parse your-data-file.js\n');
+  return;
+}
 const data = require("./" + process.argv[2]);
+
 const today = new Date;
 const timestamp = '' + today.getDate() + today.getHours() + today.getMinutes() + today.getSeconds();
 const exportFileName = "output/" + timestamp+ ".txt";
