@@ -4,3 +4,4 @@ export.json
 /node_modules
 *sublime*
 .tern-project
+.idea/
