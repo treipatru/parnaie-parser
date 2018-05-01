@@ -34,7 +34,8 @@ log4js.configure({
 });
 const logger = log4js.getLogger("entries")
 
-const rex = /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.\s?(f|invar|m|n|pl|propr|v)?\.?\s?(invar|pl|v)?\.?\s*(?:\((.*)\))?)(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(\s*?\d\.[A-Za-z\u00C0-\u017F- ,]*\.)?(.*)$/;
+const reOne = /(.*)\s*(adj|adv|dim|expr|interj|n|prefix|s|vb)\.?\s*(f|invar|m|n|pl|propr|v)?\.?\s*(invar|pl|sg|v)?\.\s?(v)?\.?(.*)/;
+const reTwo = /^(1\.[^2]*)?(2\.[^3\n]*)?(3\.[^4\n]*)?(4\.[^5\n]*)?(5\.[^6\n]*)?((?:6\.)?[^\n]*)?/;
 
 
 // Functions -------------------------------------------------------------------
@@ -70,11 +71,11 @@ const rex = /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.
  function parseData (arr) {
   arr.forEach((entry) => {
     if (entry !== null) {
-      let matches = entry.match(rex);
+      let matches = entry.match(reOne);
 
       if (matches) {
         counter ++;
-        let str = " id:" + counter;
+        let str = 'HMSET ' + counter;
 
         matches.forEach((p, index) => {
           switch (index) {
@@ -96,26 +97,31 @@ const rex = /(?:^([A-Za-z\u00C0-\u017F-\s,]*)\s)(?:(adj|adv|expr|interj|s|vb)?\.
             case 5:
               str = str + sanitizeVal(p, "prop3")
               break;
-            case 6:
+            default:
+              break;
+          }
+        })
+
+        let defs = matches[6].match(reTwo)
+        defs.forEach((p, index) => {
+          switch (index) {
+            case 1:
               str = str + sanitizeVal(p, "def0")
               break;
-            case 7:
+            case 2:
               str = str + sanitizeVal(p, "def1")
               break;
-            case 8:
+            case 3:
               str = str + sanitizeVal(p, "def2")
               break;
-            case 9:
+            case 4:
               str = str + sanitizeVal(p, "def3")
               break;
-            case 10:
+            case 5:
               str = str + sanitizeVal(p, "def4")
               break;
-            case 11:
-              str = str + sanitizeVal(p, "def5")
-              break;
-            case 12:
-              str = str + sanitizeVal(p, "def6") + "\n"
+            case 6:
+              str = str + sanitizeVal(p, "def5") + "\n"
               break;
             default:
               break;
