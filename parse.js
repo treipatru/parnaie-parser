@@ -34,7 +34,7 @@ log4js.configure({
 });
 const logger = log4js.getLogger("entries")
 
-const reOne = /(.*)\s*(adj|adv|dim|expr|interj|n|prefix|s|vb)\.?\s*(f|invar|m|n|pl|propr|v)?\.?\s*(invar|pl|sg|v)?\.\s?(v)?\.?(.*)/;
+const reOne = /(.*)\s+(adj|adv|dim|expr|interj|n|prefix|s|vb)\.?\s*(f|invar|m|n|pl|propr|v)?\.?\s*(invar|pl|sg|v)?\.\s?(v)?\.?(.*)/;
 const reTwo = /^(1\.[^2]*)?(2\.[^3\n]*)?(3\.[^4\n]*)?(4\.[^5\n]*)?(5\.[^6\n]*)?((?:6\.)?[^\n]*)?/;
 
 
